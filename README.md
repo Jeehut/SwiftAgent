@@ -7,7 +7,7 @@
 
 SwiftAgent simplifies AI agent development by providing a clean, intuitive API that handles all the complexity of agent loops, tool execution, and adapter communication. Inspired by Apple's FoundationModels framework, it brings the same elegant, declarative approach to cross-platform AI agent development.
 
-## 🔮 SwiftAgent in Action
+## SwiftAgent in Action
 
 ```swift
 import OpenAISession
@@ -60,10 +60,10 @@ func planCopenhagenWeekend() async throws {
 }
 ```
 
-## 🧭 Table of Contents
+## Table of Contents
 
-- [✨ Features](#-features)
-- [🚀 Quick Start](#-quick-start)
+- [Features](#features)
+- [Quick Start](#quick-start)
   - [Installation](#installation)
   - [Basic Usage](#basic-usage)
   - [Building Tools](#building-tools)
@@ -72,33 +72,33 @@ func planCopenhagenWeekend() async throws {
   - [Access Token Usage](#access-token-usage)
   - [Prompt Builder](#prompt-builder)
   - [Custom Generation Options](#custom-generation-options)
-- [📖 Session Schema](#-session-schema)
+- [Session Schema](#session-schema)
   - [Tools](#tools)
   - [Structured Output Entries](#structured-output-entries)
   - [Groundings](#groundings)
-- [📡 Streaming Responses](#-streaming-responses)
+- [Streaming Responses](#streaming-responses)
   - [Streaming Structured Outputs](#streaming-structured-outputs)
-- [🧵 Unified Streaming State Access](#-unified-streaming-state-access)
-- [🌐 Proxy Servers](#-proxy-servers)
-  - [Authorization](#authorization)
-- [🧠 Simulated Session](#-simulated-session)
-- [📝 Logging](#-logging)
-- [🧪 Development Status](#-development-status)
-- [📱 Example App](#-example-app)
-- [📄 License](#-license)
-- [🙏 Acknowledgments](#-acknowledgments)
+- [Streaming State Helpers](#streaming-state-helpers)
+- [Proxy Servers](#proxy-servers)
+  - [Per-turn Authorization](#per-turn-authorization)
+- [Simulated Session](#simulated-session)
+- [Logging](#logging)
+- [Development Status](#development-status)
+- [Example App](#example-app)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
-## ✨ Features
+## Features
 
-- **🎯 Zero-Setup Agent Loops** — Handle autonomous agent execution with just a few lines of code
-- **🔧 Native Tool Integration** — Use `@Generable` structs from FoundationModels as agent tools seamlessly
-- **🌐 Adapter Agnostic** — Abstract interface supports multiple AI adapters (OpenAI included, more coming)
-- **📱 Apple-Native Design** — API inspired by FoundationModels for familiar, intuitive development
-- **🚀 Modern Swift** — Built with Swift 6, async/await, and latest concurrency features
-- **📊 Rich Logging** — Comprehensive, human-readable logging for debugging and monitoring
-- **🎛️ Flexible Configuration** — Fine-tune generation options, tools, and adapter settings
+- **Zero-Setup Agent Loops** — Handle autonomous agent execution with just a few lines of code
+- **Native Tool Integration** — Use `@Generable` structs from FoundationModels as agent tools seamlessly
+- **Adapter Agnostic** — Abstract interface supports multiple AI adapters (OpenAI included, more coming)
+- **Apple-Native Design** — API inspired by FoundationModels for familiar, intuitive development
+- **Modern Swift** — Built with Swift 6, async/await, and latest concurrency features
+- **Rich Logging** — Comprehensive, human-readable logging for debugging and monitoring
+- **Flexible Configuration** — Fine-tune generation options, tools, and adapter settings
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -143,7 +143,7 @@ print(response.content)
 ```
 
 > [!NOTE]
-> Using an API key directly is great for prototyping, but do not ship it in production apps. For shipping apps, use a secure proxy with per‑turn tokens. See [Proxy Servers](#-proxy-servers) for more information.
+> Using an API key directly is great for prototyping, but do not ship it in production apps. For shipping apps, use a secure proxy with per‑turn tokens. See [Proxy Servers](#proxy-servers) for more information.
 
 ### Building Tools
 
@@ -381,7 +381,7 @@ print(response.content)
 
 These overrides apply only to the current turn, so you can increase creativity or token limits for specific prompts without mutating the session-wide configuration.
 
-## 📖 Session Schema
+## Session Schema
 
 Raw transcripts expose every event as `GeneratedContent`, which is flexible but awkward when you want to build UI or assertions.
 
@@ -566,7 +566,7 @@ for entry in try sessionSchema.resolve(session.transcript) {
 }
 ```
 
-## 📡 Streaming Responses
+## Streaming Responses
 
 `streamResponse` emits snapshots while the agent thinks, calls tools, and crafts the final answer. FoundationModels generates `PartiallyGenerated` companions for every `@Generable` type, turning each property into an optional so tokens can land as soon as they are decoded. SwiftAgent surfaces those partial values directly, then swaps in the fully realized type once the model finalizes the turn.
 
@@ -667,7 +667,7 @@ for entry in try sessionSchema.resolve(session.transcript) {
 }
 ```
 
-## 🧵 Streaming State Helpers
+## Streaming State Helpers
 
 SwiftAgent keeps SwiftUI views stable by exposing current projections of in-flight data. For tool runs, `currentArguments` always returns the partially generated variant of your argument type alongside an `isFinal` flag, so the view does not need to branch on enum states. When you need the fully validated payload reach for `finalArguments`, and if you want to respond to streaming transitions you can switch over `argumentsPhase`.
 
@@ -714,7 +714,7 @@ struct WeatherToolRunView: View {
 
 Structured outputs follow the same pattern with `snapshot.currentContent`: you always receive a partially generated projection that updates in place, while `finalContent` and `contentPhase` give you access to the completed schema and the streaming status respectively. The Example App’s Agent Playground view leans on these helpers to render incremental suggestions without triggering SwiftUI identity churn.
 
-## 🌐 Proxy Servers
+## Proxy Servers
 
 Sending your OpenAI API key from the device is fine while sketching ideas, but it is not acceptable once you ship. Point the SDK at a proxy you control so the app never sees the provider credential:
 
@@ -749,7 +749,7 @@ let response = try await session.withAuthorization(token: turnToken) {
 
 For quick prototypes you can still use `OpenAIConfiguration.direct(apiKey:)`, but remove it before release.
 
-## 🧠 Simulated Session
+## Simulated Session
 
 You can test and develop your agents without making API calls using the built-in simulation system. This is perfect for prototyping, testing, and developing UIs before integrating with live APIs.
 
@@ -797,7 +797,7 @@ let response = try await session.respond(to: "What's the weather like in San Fra
 print(response.content) // "It's a beautiful sunny day in San Francisco with 22.5°C!"
 ```
 
-## 📝 Logging
+## Logging
 
 ```swift
 // Enable comprehensive logging
@@ -813,11 +813,11 @@ SwiftAgentConfiguration.setNetworkLoggingEnabled(true)
 // ✅ Finished
 ```
 
-## 🧪 Development Status
+## Development Status
 
-**⚠️ Work in Progress**: SwiftAgent is under active development. APIs may change, and breaking updates are expected. Use in production with caution.
+**Work in Progress**: SwiftAgent is under active development. APIs may change, and breaking updates are expected. Use in production with caution.
 
-## 📱 Example App
+## Example App
 
 SwiftAgent ships with a SwiftUI demo that showcases the SDK in action. Open the project at `Examples/Example App/ExampleApp` to explore an agent playground that:
 
@@ -827,11 +827,11 @@ SwiftAgent ships with a SwiftUI demo that showcases the SDK in action. Open the 
 
 Use the app to experiment with SwiftAgent locally or as a starting point for integrating the SDK into your own SwiftUI experience.
 
-## 📄 License
+## License
 
 SwiftAgent is available under the MIT license. See [LICENSE](LICENSE) for more information.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Inspired by Apple's [FoundationModels](https://developer.apple.com/documentation/foundationmodels) framework
 - Built with the amazing Swift ecosystem and community
