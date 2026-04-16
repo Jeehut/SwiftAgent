@@ -12,7 +12,7 @@ public actor AnthropicAdapter: Adapter {
 
   public nonisolated let tools: [any SwiftAgentTool]
   package let instructions: String
-  package let httpClient: SwiftAgent.HTTPClient
+  public nonisolated let httpClient: SwiftAgent.HTTPClient
   package let messagesPath: String = "/v1/messages"
 
   public init(
